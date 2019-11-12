@@ -18,6 +18,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@koa/multer": "^2.0.0",
     "crypto-js": "^3.1.9-1",
     "dotenv": "^5.0.1",
     "koa": "^2.5.0",
@@ -29,10 +30,12 @@
     "koa-session": "^5.8.1",
     "koa-static-server": "^1.4.0",
     "moment": "^2.22.2",
+    "multer": "^1.4.2",
     "mysql2": "^1.5.3",
     "passport-google-auth": "^1.0.2",
     "passport-local": "^1.0.0",
     "passport-token-auth": "^0.1.2",
+    "rimraf": "^3.0.0",
     "sequelize": "^4.37.4",
     "sequelize-cli": "^4.0.0",
     "websocket": "^1.0.25"

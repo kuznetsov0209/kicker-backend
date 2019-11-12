@@ -5,6 +5,11 @@ async function getUsers() {
   return users;
 }
 
+async function getUser(userId) {
+  const user = await db.User.findById(userId);
+  return user;
+}
+
 async function isAdmin(userId) {
   const user = await db.User.findById(userId);
   // @todo: Create user access permissions system
@@ -20,6 +25,7 @@ async function updateUser(userId, payload) {
 }
 
 module.exports = {
+  getUser,
   getUsers,
   updateUser,
   isAdmin

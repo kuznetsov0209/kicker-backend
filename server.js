@@ -11,6 +11,7 @@ const session = require("koa-session");
 const passport = require("koa-passport");
 const cors = require("koa-cors");
 const render = require("koa-ejs");
+const serve = require("koa-static-server");
 
 const authRouter = require("./routers/authRouter");
 const apiGameRatingRouter = require("./routers/apiGameRatingRouter");
@@ -36,6 +37,7 @@ server.use(session({}, server));
 server.use(passport.initialize());
 server.use(passport.session());
 server.use(bodyParser());
+server.use(serve({ rootDir: "public" }));
 
 server.use(authRouter.routes());
 server.use(apiGameRatingRouter.routes());
