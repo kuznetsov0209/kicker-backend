@@ -37,7 +37,9 @@ server.use(session({}, server));
 server.use(passport.initialize());
 server.use(passport.session());
 server.use(bodyParser());
-server.use(serve({ rootDir: "public" }));
+server.use(
+  serve({ rootDir: process.env.PUBLIC_DIR, rootPath: process.env.PUBLIC_PATH })
+);
 
 server.use(authRouter.routes());
 server.use(apiGameRatingRouter.routes());

@@ -23,6 +23,7 @@ apiUsersRouter
     const user = await usersModule.updateUser(userId, ctx.request.body);
     ctx.body = { user };
   })
+  // @todo: Move files to external storage
   .post("/api/users/:userId/photo", upload.single("photo"), async ctx => {
     const { userId } = ctx.params;
     const user = await usersModule.getUser(userId);
@@ -31,7 +32,7 @@ apiUsersRouter
     }
 
     const appRoot = path.dirname(require.main.filename);
-    const avatarDir = path.resolve(appRoot, "public", userId);
+    const avatarDir = path.resolve(appRoot, process.env.PUBLIC_DIR, userId);
     const avatarPath = path.resolve(avatarDir, ctx.file.originalname);
 
     await new Promise(resolve => rimraf(avatarDir, resolve));
@@ -42,7 +43,7 @@ apiUsersRouter
     });
 
     ctx.body = {
-      avatarPath: `/${userId}/${ctx.file.originalname}`
+      avatarPath: `${process.env.PUBLIC_PATH}/${userId}/${ctx.file.originalname}`
     };
   });
 
