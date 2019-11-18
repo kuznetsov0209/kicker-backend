@@ -32,14 +32,6 @@ async function getGames(date) {
   return games;
 }
 
-async function getAllGames() {
-  const games = await db.Game.findAll({
-    include: [{ model: db.User }, { model: db.Goal }],
-    order: [["createdAt"]]
-  });
-  return games;
-}
-
 async function getGamesWithPlayers({ team1PlayersIds, team2PlayersIds }) {
   const { Op } = db.Sequelize;
 
@@ -167,7 +159,6 @@ async function finishGame({ gameId }) {
 module.exports = {
   getGames,
   getGamesWithPlayers,
-  getAllGames,
   getGame,
   addGame,
   removeGame,
