@@ -9,8 +9,8 @@ apiGameRatingRouter.post("/api/gameRating/test", async ctx => {
 });
 
 apiGameRatingRouter.post("/api/gameRating/recalculateStatistic", async ctx => {
-  const result = await ratingModule.recalculateStatistic();
-  ctx.body = { result };
+  await ratingModule.recalculateStatistic();
+  ctx.body = { success: true };
 });
 
 module.exports = apiGameRatingRouter;
