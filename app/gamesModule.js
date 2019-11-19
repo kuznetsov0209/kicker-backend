@@ -156,7 +156,31 @@ async function finishGame({ gameId }) {
   return game;
 }
 
+function isGameValid(game) {
+  return game.Users && game.Users.length === 4 && game.Goals;
+}
+
+async function getAllGamesIdRS(transaction) {
+  const gamesIdList = await db.Game.findAll({
+    attributes: ["id"],
+    order: [["createdAt"]],
+    transaction
+  });
+  return gamesIdList;
+}
+
+async function getGameRS(gameId, transaction) {
+  const game = await db.Game.findByPk(gameId, {
+    include: [{ model: db.User }, { model: db.Goal }],
+    transaction
+  });
+  return game;
+}
+
 module.exports = {
+  isGameValid,
+  getAllGamesIdRS,
+  getGameRS,
   getGames,
   getGamesWithPlayers,
   getGame,
