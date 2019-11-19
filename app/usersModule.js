@@ -19,8 +19,16 @@ async function updateUser(userId, payload) {
   return user;
 }
 
+async function updateUserRatingRS(userId, rating, transaction) {
+  await db.User.update(
+    { rating: rating },
+    { where: { id: userId }, transaction }
+  );
+}
+
 module.exports = {
   getUsers,
   updateUser,
+  updateUserRatingRS,
   isAdmin
 };
