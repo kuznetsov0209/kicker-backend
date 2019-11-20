@@ -8,9 +8,23 @@ apiGameRatingRouter.post("/api/gameRating/test", async ctx => {
   ctx.body = { gameRating };
 });
 
+apiGameRatingRouter.get("/api/gameRating/recalculationStatus", async ctx => {
+  const statusObj = ratingModule.getRecalculationStatus();
+  ctx.body = { status: statusObj.status, dateTime: statusObj.date };
+});
+
 apiGameRatingRouter.post("/api/gameRating/recalculateStatistic", async ctx => {
-  await ratingModule.recalculateStatistic();
-  ctx.body = { success: true };
+  try {
+    const statusObj = ratingModule.getRecalculationStatus();
+    if (statusObj.status === "IN PROGRESS") {
+      ctx.body = { status: statusObj.status, beginAt: statusObj.date };
+    } else {
+      ratingModule.recalculateStatistic();
+      ctx.body = { status: "Recalculation process is started" };
+    }
+  } catch (error) {
+    ctx.throw(500);
+  }
 });
 
 module.exports = apiGameRatingRouter;
