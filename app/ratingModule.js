@@ -1,11 +1,9 @@
-const moment = require("moment");
 const db = require("../models");
 const elo = require("../services/elo");
 const gamesModule = require("./gamesModule");
 const usersModule = require("./usersModule");
 
 const DEFAULT_RATING = 1400;
-var STATUS = { status: "", date: "" };
 
 const TEAM_A = 0;
 const TEAM_B = 1;
@@ -69,26 +67,15 @@ async function addGame(game) {
   };
 }
 
-function getRecalculationStatus() {
-  return STATUS;
-}
-
-function updateStatus(status, date) {
-  STATUS.status = status;
-  STATUS.date = date;
-}
-
 async function recalculateStatistic() {
   const transaction = await db.sequelize.transaction();
   try {
-    updateStatus("IN PROGRESS", moment());
     await resetUsersRating(transaction);
     await cleanGameRatingTable(transaction);
     await calculateStatistic(transaction);
-    updateStatus("DONE", moment());
+    await transaction.commit();
   } catch (error) {
     await transaction.rollback();
-    updateStatus("ERROR", moment());
     console.error(error);
     throw error;
   }
@@ -101,6 +88,14 @@ async function resetUsersRating(transaction) {
   );
 }
 
+async function getAllGamesId(transaction) {
+  const gamesId = await db.sequelize.query(
+    "SELECT id FROM Games ORDER BY createdAt",
+    { type: db.sequelize.QueryTypes.SELECT, transaction }
+  );
+  return gamesId;
+}
+
 async function cleanGameRatingTable(transaction) {
   await db.GameRating.destroy({
     truncate: true,
@@ -111,32 +106,32 @@ async function cleanGameRatingTable(transaction) {
 async function calculateStatisticForGame(game, transaction) {
   const row = await addGame(game);
   await db.GameRating.create(row, { transaction });
-  await usersModule.updateUserRatingRS(
-    row.userA1Id,
-    row.userA1Rating + row.userA1Points,
-    transaction
-  );
-  await usersModule.updateUserRatingRS(
-    row.userA2Id,
-    row.userA2Rating + row.userA2Points,
-    transaction
-  );
-  await usersModule.updateUserRatingRS(
-    row.userB1Id,
-    row.userB1Rating + row.userB1Points,
-    transaction
-  );
-  await usersModule.updateUserRatingRS(
-    row.userB2Id,
-    row.userB2Rating + row.userB2Points,
-    transaction
-  );
+  const userA1 = {
+    userId: row.userA1Id,
+    payload: { rating: row.userA1Rating + row.userA1Points }
+  };
+  const userA2 = {
+    userId: row.userA2Id,
+    payload: { rating: row.userA2Rating + row.userA2Points }
+  };
+  const userB1 = {
+    userId: row.userB1Id,
+    payload: { rating: row.userB1Rating + row.userB1Points }
+  };
+  const userB2 = {
+    userId: row.userB2Id,
+    payload: { rating: row.userB2Rating + row.userB2Points }
+  };
+  await usersModule.updateUser(userA1, transaction);
+  await usersModule.updateUser(userA2, transaction);
+  await usersModule.updateUser(userB1, transaction);
+  await usersModule.updateUser(userB2, transaction);
 }
 
 async function calculateStatistic(transaction) {
-  const gamesIdList = await gamesModule.getAllGamesIdRS(transaction);
+  const gamesIdList = await getAllGamesId(transaction);
   for (let i = 0; i < gamesIdList.length; i++) {
-    const game = await gamesModule.getGameRS(gamesIdList[i].id, transaction);
+    const game = await gamesModule.getGame(gamesIdList[i].id, transaction);
     if (gamesModule.isGameValid(game)) {
       await calculateStatisticForGame(game, transaction);
     }
@@ -145,6 +140,5 @@ async function calculateStatistic(transaction) {
 
 module.exports = {
   addGame,
-  getRecalculationStatus,
   recalculateStatistic
 };
