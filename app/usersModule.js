@@ -11,24 +11,19 @@ async function isAdmin(userId) {
   return user.email === process.env.ADMIN_EMAIL;
 }
 
-async function updateUser(userId, payload) {
-  const user = await db.User.findById(userId);
+async function updateUser(userObj, transaction) {
+  const user = await db.User.findById(userObj.userId, { transaction });
   if (user) {
-    await user.update(payload, { fields: ["name", "photoUrl"] });
+    await user.update(userObj.payload, {
+      fields: ["name", "photoUrl", "rating"],
+      transaction
+    });
   }
   return user;
-}
-
-async function updateUserRatingRS(userId, rating, transaction) {
-  await db.User.update(
-    { rating: rating },
-    { where: { id: userId }, transaction }
-  );
 }
 
 module.exports = {
   getUsers,
   updateUser,
-  updateUserRatingRS,
   isAdmin
 };
