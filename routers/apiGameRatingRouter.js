@@ -1,5 +1,6 @@
 const Router = require("koa-router");
 const ratingModule = require("../app/ratingModule");
+const authModule = require("../app/authModule");
 
 const apiGameRatingRouter = new Router();
 
@@ -8,23 +9,17 @@ apiGameRatingRouter.post("/api/gameRating/test", async ctx => {
   ctx.body = { gameRating };
 });
 
-apiGameRatingRouter.get("/api/gameRating/recalculationStatus", async ctx => {
-  const statusObj = ratingModule.getRecalculationStatus();
-  ctx.body = { status: statusObj.status, dateTime: statusObj.date };
-});
-
-apiGameRatingRouter.post("/api/gameRating/recalculateStatistic", async ctx => {
-  try {
-    const statusObj = ratingModule.getRecalculationStatus();
-    if (statusObj.status === "IN PROGRESS") {
-      ctx.body = { status: statusObj.status, beginAt: statusObj.date };
-    } else {
+apiGameRatingRouter.post(
+  "/api/gameRating/recalculateStatistic",
+  authModule.adminOnly,
+  async ctx => {
+    try {
       ratingModule.recalculateStatistic();
       ctx.body = { status: "Recalculation process is started" };
+    } catch (error) {
+      ctx.throw(400);
     }
-  } catch (error) {
-    ctx.throw(500);
   }
-});
+);
 
 module.exports = apiGameRatingRouter;
