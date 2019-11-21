@@ -82,9 +82,10 @@ WHERE
   return games;
 }
 
-async function getGame(gameId) {
+async function getGame(gameId, params = {}) {
   const game = await db.Game.findById(gameId, {
-    include: [{ model: db.User }, { model: db.Goal }]
+    include: [{ model: db.User }, { model: db.Goal }],
+    transaction: params.transaction
   });
   return game;
 }
@@ -156,7 +157,12 @@ async function finishGame({ gameId }) {
   return game;
 }
 
+function isGameValid(game) {
+  return game.Users && game.Users.length === 4 && game.Goals;
+}
+
 module.exports = {
+  isGameValid,
   getGames,
   getGamesWithPlayers,
   getGame,
