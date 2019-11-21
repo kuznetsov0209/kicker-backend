@@ -103,37 +103,44 @@ async function cleanGameRatingTable(transaction) {
   });
 }
 
-async function calculateStatisticForGame(game, transaction) {
+async function calculateStatisticForGame(game, params) {
+  const transaction = params
+    ? params.transaction
+      ? params.transaction
+      : undefined
+    : undefined;
   const row = await addGame(game);
-  await db.GameRating.create(row, { transaction });
+  await db.GameRating.create(row, { transaction: transaction });
   await usersModule.updateUser(
     row.userA1Id,
     { rating: row.userA1Rating + row.userA1Points },
-    transaction
+    { transaction: transaction }
   );
   await usersModule.updateUser(
     row.userA2Id,
     { rating: row.userA2Rating + row.userA2Points },
-    transaction
+    { transaction: transaction }
   );
   await usersModule.updateUser(
     row.userB1Id,
     { rating: row.userB1Rating + row.userB1Points },
-    transaction
+    { transaction: transaction }
   );
   await usersModule.updateUser(
     row.userB2Id,
     { rating: row.userB2Rating + row.userB2Points },
-    transaction
+    { transaction: transaction }
   );
 }
 
 async function calculateStatistic(transaction) {
   const gamesIdList = await getAllGamesId(transaction);
   for (let i = 0; i < gamesIdList.length; i++) {
-    const game = await gamesModule.getGame(gamesIdList[i].id, transaction);
+    const game = await gamesModule.getGame(gamesIdList[i].id, {
+      transaction: transaction
+    });
     if (gamesModule.isGameValid(game)) {
-      await calculateStatisticForGame(game, transaction);
+      await calculateStatisticForGame(game, { transaction: transaction });
     }
   }
 }
