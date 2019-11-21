@@ -103,33 +103,28 @@ async function cleanGameRatingTable(transaction) {
   });
 }
 
-async function calculateStatisticForGame(game, params) {
-  const transaction = params
-    ? params.transaction
-      ? params.transaction
-      : undefined
-    : undefined;
+async function calculateStatisticForGame(game, params = {}) {
   const row = await addGame(game);
-  await db.GameRating.create(row, { transaction: transaction });
+  await db.GameRating.create(row, { transaction: params.transaction });
   await usersModule.updateUser(
     row.userA1Id,
     { rating: row.userA1Rating + row.userA1Points },
-    { transaction: transaction }
+    { transaction: params.transaction }
   );
   await usersModule.updateUser(
     row.userA2Id,
     { rating: row.userA2Rating + row.userA2Points },
-    { transaction: transaction }
+    { transaction: params.transaction }
   );
   await usersModule.updateUser(
     row.userB1Id,
     { rating: row.userB1Rating + row.userB1Points },
-    { transaction: transaction }
+    { transaction: params.transaction }
   );
   await usersModule.updateUser(
     row.userB2Id,
     { rating: row.userB2Rating + row.userB2Points },
-    { transaction: transaction }
+    { transaction: params.transaction }
   );
 }
 
