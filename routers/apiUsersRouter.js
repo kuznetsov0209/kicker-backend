@@ -5,11 +5,7 @@ const authModule = require("../app/authModule");
 const apiUsersRouter = new Router();
 
 apiUsersRouter
-  .get("/api/user", async ctx => {
-    const user = ctx.state.user || null;
-    ctx.body = { user };
-  })
-  .get("/api/users", async ctx => {
+  .get("/api/users", authModule.authenticatedOnly, async ctx => {
     const users = await usersModule.getUsers();
     ctx.body = { users };
   })

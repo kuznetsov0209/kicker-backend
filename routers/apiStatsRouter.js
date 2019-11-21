@@ -1,9 +1,10 @@
 const Router = require("koa-router");
 const statsModule = require("../app/statsModule");
+const authModule = require("../app/authModule");
 
 const apiStatsRouter = new Router();
 
-apiStatsRouter.get("/api/stats", async ctx => {
+apiStatsRouter.get("/api/stats", authModule.authenticatedOnly, async ctx => {
   const { date, userId } = ctx.request.query;
   const usersStats = await statsModule.getUsersStats({
     weekDate: date,
@@ -12,7 +13,7 @@ apiStatsRouter.get("/api/stats", async ctx => {
   ctx.body = { usersStats };
 });
 
-apiStatsRouter.get("/404fest", async ctx => {
+apiStatsRouter.get("/404fest", authModule.authenticatedOnly, async ctx => {
   const usersStats = await statsModule.getUsersStats({
     weekDate: new Date().toISOString()
   });

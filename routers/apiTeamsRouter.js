@@ -5,7 +5,7 @@ const teamsModule = require("../app/teamsModule");
 const apiTournamentsRouter = new Router();
 
 apiTournamentsRouter
-  .post("/admin/api/teams", async ctx => {
+  .post("/admin/api/teams", authModule.adminOnly, async ctx => {
     const { name, player1Id, player2Id } = ctx.request.body;
 
     const team = await teamsModule.createTeam({
@@ -15,7 +15,7 @@ apiTournamentsRouter
     });
     ctx.body = { team };
   })
-  .post("/api/teams", async ctx => {
+  .post("/api/teams", authModule.authenticatedOnly, async ctx => {
     const { user } = ctx.state;
     const { name, player2Id } = ctx.request.body;
 
@@ -26,7 +26,7 @@ apiTournamentsRouter
     });
     ctx.body = { team };
   })
-  .get("/api/teams", async ctx => {
+  .get("/api/teams", authModule.authenticatedOnly, async ctx => {
     const teams = await teamsModule.getTeams();
     ctx.body = { teams };
   });
