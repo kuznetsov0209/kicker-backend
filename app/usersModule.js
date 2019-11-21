@@ -11,10 +11,10 @@ async function isAdmin(userId) {
   return user.email === process.env.ADMIN_EMAIL;
 }
 
-async function updateUser(userObj, transaction) {
-  const user = await db.User.findById(userObj.userId, { transaction });
+async function updateUser(userId, payload, transaction) {
+  const user = await db.User.findById(userId, { transaction });
   if (user) {
-    await user.update(userObj.payload, {
+    await user.update(payload, {
       fields: ["name", "photoUrl", "rating"],
       transaction
     });
