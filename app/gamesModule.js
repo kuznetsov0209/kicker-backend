@@ -82,14 +82,10 @@ WHERE
   return games;
 }
 
-async function getGame(gameId, params) {
+async function getGame(gameId, params = {}) {
   const game = await db.Game.findById(gameId, {
     include: [{ model: db.User }, { model: db.Goal }],
-    transaction: params
-      ? params.transaction
-        ? params.transaction
-        : undefined
-      : undefined
+    transaction: params.transaction
   });
   return game;
 }
