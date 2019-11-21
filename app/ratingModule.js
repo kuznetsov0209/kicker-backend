@@ -106,26 +106,26 @@ async function cleanGameRatingTable(transaction) {
 async function calculateStatisticForGame(game, transaction) {
   const row = await addGame(game);
   await db.GameRating.create(row, { transaction });
-  const userA1 = {
-    userId: row.userA1Id,
-    payload: { rating: row.userA1Rating + row.userA1Points }
-  };
-  const userA2 = {
-    userId: row.userA2Id,
-    payload: { rating: row.userA2Rating + row.userA2Points }
-  };
-  const userB1 = {
-    userId: row.userB1Id,
-    payload: { rating: row.userB1Rating + row.userB1Points }
-  };
-  const userB2 = {
-    userId: row.userB2Id,
-    payload: { rating: row.userB2Rating + row.userB2Points }
-  };
-  await usersModule.updateUser(userA1, transaction);
-  await usersModule.updateUser(userA2, transaction);
-  await usersModule.updateUser(userB1, transaction);
-  await usersModule.updateUser(userB2, transaction);
+  await usersModule.updateUser(
+    row.userA1Id,
+    { rating: row.userA1Rating + row.userA1Points },
+    transaction
+  );
+  await usersModule.updateUser(
+    row.userA2Id,
+    { rating: row.userA2Rating + row.userA2Points },
+    transaction
+  );
+  await usersModule.updateUser(
+    row.userB1Id,
+    { rating: row.userB1Rating + row.userB1Points },
+    transaction
+  );
+  await usersModule.updateUser(
+    row.userB2Id,
+    { rating: row.userB2Rating + row.userB2Points },
+    transaction
+  );
 }
 
 async function calculateStatistic(transaction) {
