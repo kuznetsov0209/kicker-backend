@@ -1,0 +1,14 @@
+.vscode
+.idea
+.git
+
+node_modules
+scripts
+.env
+
+Dockerfile
+docker-compose.yml
+coldbrew
+.gitlab-ci
+README.md
+master.js
