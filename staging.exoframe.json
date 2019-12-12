@@ -1,0 +1,24 @@
+{
+  "name": "kicker-api-staging",
+  "restart": "on-failure:2",
+  "domain": "api-staging.kicker.mercury.office",
+  "port": "80",
+  "project": "kicker-api-staging",
+  "compress": false,
+  "letsencrypt": false,
+  "templace": "image",
+  "image": "kickermercdev/kicker-backend:staging-latest",
+  "env": {
+    "PORT": 80,
+    "DB_USERNAME": "@DB_USER",
+    "DB_PASSWORD": "@DB_PASSWORD",
+    "DB_NAME": "@DB_DATABASE",
+    "DB_HOST": "staging_mysql",
+    "SECRET_KEY": "@SECRET_KEY",
+    "GOOGLE_CLIENT_ID": "@GOOGLE_CLIENT_ID",
+    "GOOGLE_CLIENT_SECRET": "@GOOGLE_CLIENT_SECRET",
+    "GOOGLE_CALLBACK_HOST": "http://api-staging.kicker.mercury.office",
+    "GOOGLE_AUTH_REFERRER": "http://staging.kicker.mercury.office",
+    "ADMIN_EMAIL": "kicker@mercurydevelopment.com"
+  }
+}

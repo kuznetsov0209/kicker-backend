@@ -1,0 +1,24 @@
+{
+  "name": "kicker-api-production",
+  "restart": "always",
+  "domain": "api.kicker.mercury.office",
+  "port": "80",
+  "project": "kicker-api-production",
+  "compress": false,
+  "letsencrypt": false,
+  "template": "image",
+  "image": "kickermercdev/kicker-backend:latest",
+  "env": {
+    "PORT": 80,
+    "DB_USERNAME": "@DB_USER",
+    "DB_PASSWORD": "@DB_PASSWORD",
+    "DB_NAME": "@DB_DATABASE",
+    "DB_HOST": "@DB_HOST",
+    "SECRET_KEY": "@SECRET_KEY",
+    "GOOGLE_CLIENT_ID": "@GOOGLE_CLIENT_ID",
+    "GOOGLE_CLIENT_SECRET": "@GOOGLE_CLIENT_SECRET",
+    "GOOGLE_CALLBACK_HOST": "http://api.kicker.mercury.office",
+    "GOOGLE_AUTH_REFERRER": "http://kicker.mercury.office",
+    "ADMIN_EMAIL": "kicker@mercurydevelopment.com"
+  }
+}
