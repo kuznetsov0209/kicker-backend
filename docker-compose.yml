@@ -26,18 +26,20 @@ services:
     depends_on:
     - mysql
   api:
+    user: node
     restart: always
-    image: "node:10"
-    working_dir: /home/node/app
-    environment:
-      NODE_ENV: "development"
-    volumes:
-    - .:/home/node/app
-    ports:
-    - 3000:3000
     depends_on:
       mysql:
         condition: service_healthy
-    command: "yarn start"
+    build: .
+    volumes:
+      - .:/home/node/app
+      - /home/node/app/node_modules/
+    ports:
+      - 3000:3000
+    env_file:
+      - .env
+    command: "node_modules/.bin/nodemon server.js"
+
 volumes:
   database:
