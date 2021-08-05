@@ -1,7 +1,7 @@
 {
   "name": "kicker-api-production",
   "restart": "always",
-  "domain": "api.kicker.mercury.office",
+  "domain": "api.kicker.mercdev.com",
   "port": "80",
   "project": "kicker-api-production",
   "compress": false,
@@ -17,8 +17,8 @@
     "SECRET_KEY": "@SECRET_KEY",
     "GOOGLE_CLIENT_ID": "@GOOGLE_CLIENT_ID",
     "GOOGLE_CLIENT_SECRET": "@GOOGLE_CLIENT_SECRET",
-    "GOOGLE_CALLBACK_HOST": "http://api.kicker.mercury.office",
-    "GOOGLE_AUTH_REFERRER": "http://kicker.mercury.office",
+    "GOOGLE_CALLBACK_HOST": "https://api.kicker.mercdev.com",
+    "GOOGLE_AUTH_REFERRER": "https://kicker.mercdev.com",
     "ADMIN_EMAIL": "kicker@mercurydevelopment.com"
   }
 }
