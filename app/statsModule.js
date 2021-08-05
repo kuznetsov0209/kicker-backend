@@ -136,8 +136,8 @@ function getUsersStatsQuery(usersGamesQuery, { weekDate, userId, gamesIds }) {
       .format("MM/DD/YYYY");
 
     whereConditions.push(`
-      UserGames.gameDate > STR_TO_DATE('${startOfWeek}', '%m/%d/%Y')
-        AND UserGames.gameDate <= STR_TO_DATE('${endOfWeek}', '%m/%d/%Y')
+      DATE(UserGames.gameDate) > STR_TO_DATE('${startOfWeek}', '%m/%d/%Y')
+        AND DATE(UserGames.gameDate) <= STR_TO_DATE('${endOfWeek}', '%m/%d/%Y')
     `);
   }
 
