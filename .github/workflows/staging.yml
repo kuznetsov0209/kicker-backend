@@ -17,27 +17,27 @@ jobs:
 
       - name: Define var
         run: |
-          echo "::set-env name=IMAGE_NAME::${DOCKER_LOGIN}/kicker-backend"
-          echo "::set-env name=PACKAGE_VERSION::$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' package.json)"
+          echo "IMAGE_NAME=${DOCKER_LOGIN}/kicker-backend" >> $GITHUB_ENV
+          echo "PACKAGE_VERSION=$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' package.json)" >> $GITHUB_ENV
 
       - name: Build the Docker container image
         run: |
-          echo $IMAGE_NAME
-          echo $PACKAGE_VERSION
-          docker pull ${IMAGE_NAME}:staging-latest || true
+          echo ${{ env.IMAGE_NAME }}
+          echo ${{ env.PACKAGE_VERSION }}
+          docker pull ${{ env.IMAGE_NAME }}:staging-latest || true
           docker build \
-           --cache-from ${IMAGE_NAME}:staging-latest \
-           -t ${IMAGE_NAME}:staging-$PACKAGE_VERSION \
-           -t ${IMAGE_NAME}:staging-latest \
+           --cache-from ${{ env.IMAGE_NAME }}:staging-latest \
+           -t ${{ env.IMAGE_NAME }}:staging-${{ env.PACKAGE_VERSION }} \
+           -t ${{ env.IMAGE_NAME }}:staging-latest \
            .
 
       - name: Push the Docker container image
         run: |
-          echo $PACKAGE_VERSION
+          echo ${{ env.PACKAGE_VERSION }}
 
-          docker login --username ${DOCKER_LOGIN} -p ${{ secrets.DOCKER_HUB_TOKEN }} 
-          docker push ${IMAGE_NAME}:staging-$PACKAGE_VERSION
-          docker push ${IMAGE_NAME}:staging-latest
+          docker login --username ${DOCKER_LOGIN} -p ${{ secrets.DOCKER_HUB_TOKEN }}
+          docker push ${{ env.IMAGE_NAME }}:staging-${{ env.PACKAGE_VERSION }}
+          docker push ${{ env.IMAGE_NAME }}:staging-latest
 
   deploy:
     name: Deploy
