@@ -2,8 +2,8 @@
 
 ## Prerequisites
 
-* Install [Docker Engine](https://hub.docker.com/search?q=&type=edition&offering=community)
-* Install [Yarn](https://yarnpkg.com/en/docs/install) package manager
+- Install [Docker Engine](https://hub.docker.com/search?q=&type=edition&offering=community)
+- Install [Yarn](https://yarnpkg.com/en/docs/install) package manager
 
 ## Run services
 
@@ -22,7 +22,7 @@ docker-compose up --detach
 
 ```bash
 # Login to api service container
-docker-compose exec api bash
+docker-compose exec api /bin/sh
 
 # Apply database migrations
 yarn sequelize db:migrate
