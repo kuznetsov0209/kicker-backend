@@ -13,6 +13,10 @@ apiUsersRouter
     const users = await usersModule.getUsers();
     ctx.body = { users };
   })
+  .post("/api/users/qr", async ctx => {
+    const user = await usersModule.createUserWithExternalId(ctx.request.body);
+    ctx.body = { user };
+  })
   .post("/api/users/:userId", authModule.adminOnly, async ctx => {
     const { userId } = ctx.params;
     const user = await usersModule.updateUser(userId, ctx.request.body);
