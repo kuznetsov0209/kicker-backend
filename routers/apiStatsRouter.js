@@ -12,7 +12,7 @@ apiStatsRouter.get("/api/stats", async ctx => {
   ctx.body = { usersStats };
 });
 
-apiStatsRouter.get("/404fest", async ctx => {
+apiStatsRouter.get("/leaderboard", async ctx => {
   const usersStats = await statsModule.getUsersStats({
     weekDate: new Date().toISOString()
   });
