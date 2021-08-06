@@ -128,16 +128,15 @@ function getUsersStatsQuery(usersGamesQuery, { weekDate, userId, gamesIds }) {
   const whereConditions = ["1 = 1"];
 
   if (weekDate) {
-    const startOfWeek = moment(weekDate)
-      .startOf("week")
+    const startOfDay = moment(weekDate)
+      .startOf("day")
       .format("MM/DD/YYYY");
     const endOfWeek = moment(weekDate)
       .endOf("week")
       .format("MM/DD/YYYY");
 
     whereConditions.push(`
-      DATE(UserGames.gameDate) > STR_TO_DATE('${startOfWeek}', '%m/%d/%Y')
-        AND DATE(UserGames.gameDate) <= STR_TO_DATE('${endOfWeek}', '%m/%d/%Y')
+      DATE(UserGames.gameDate) = STR_TO_DATE('${startOfDay}', '%m/%d/%Y')
     `);
   }
 
