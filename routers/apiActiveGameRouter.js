@@ -27,6 +27,7 @@ apiActiveGameRouter
   )
   .post("/api/active-game/events", async ctx => {
     activeGameEmitter.emit("event", ctx.request.body);
+    ctx.body = ctx.request.body;
   });
 
 module.exports = apiActiveGameRouter;
