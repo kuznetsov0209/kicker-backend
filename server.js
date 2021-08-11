@@ -21,6 +21,7 @@ const apiStatsRouter = require("./routers/apiStatsRouter");
 const apiProfileRouter = require("./routers/apiProfileRouter");
 const apiTournamentsRouter = require("./routers/apiTournamentsRouter");
 const apiTeamsRouter = require("./routers/apiTeamsRouter");
+const apiActiveGameRouter = require("./routers/apiActiveGameRouter");
 
 const server = new Koa();
 render(server, {
@@ -48,5 +49,6 @@ server.use(apiStatsRouter.routes());
 server.use(apiProfileRouter.routes());
 server.use(apiTournamentsRouter.routes());
 server.use(apiTeamsRouter.routes());
+server.use(apiActiveGameRouter.routes());
 
 server.listen(process.env.PORT);
