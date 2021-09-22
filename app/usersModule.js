@@ -39,9 +39,31 @@ async function createUserWithExternalId(payload) {
   return user;
 }
 
+async function createUser(payload) {
+  let user = await db.User.findOne({
+    where: {
+      email: payload.email
+    }
+  });
+
+  const params = {
+    name: payload.name,
+    email: payload.email,
+    photoUrl: payload.image
+  };
+
+  if (user) {
+    await user.update(params);
+  } else {
+    user = await db.User.create(params);
+  }
+  return user;
+}
+
 module.exports = {
   getUsers,
   updateUser,
   createUserWithExternalId,
-  isAdmin
+  isAdmin,
+  createUser
 };

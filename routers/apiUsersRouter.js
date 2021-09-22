@@ -21,6 +21,10 @@ apiUsersRouter
     const { userId } = ctx.params;
     const user = await usersModule.updateUser(userId, ctx.request.body);
     ctx.body = { user };
+  })
+  .post("/api/user", async ctx => {
+    const user = await usersModule.createUser(ctx.request.body);
+    ctx.body = { user };
   });
 
 module.exports = apiUsersRouter;

@@ -41,9 +41,9 @@ function initPassportStrategies() {
                   .join(" "))
           };
 
-          if (!email.includes("@mercurydevelopment.com")) {
-            done(new Error("The party is private. Mercury only"));
-          }
+          // if (!email.includes("@mercurydevelopment.com")) {
+          //   done(new Error("The party is private. Mercury only"));
+          // }
 
           let user = await db.User.findOne({ where: { email } });
           if (user) {

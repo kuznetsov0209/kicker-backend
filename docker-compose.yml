@@ -1,30 +1,30 @@
-version: '2.1'
+version: "2.1"
 
 services:
   mysql:
     restart: always
     command: --default-authentication-plugin=mysql_native_password
     environment:
-      MYSQL_ROOT_PASSWORD : cegthgfhjkm
+      MYSQL_ROOT_PASSWORD: cegthgfhjkm
       MYSQL_DATABASE: "kicker_development"
       MYSQL_USER: "user"
       MYSQL_PASSWORD: "password"
-    image: 'mysql:8.0.15'
+    image: "mysql:8.0.15"
     healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 20s
       retries: 10
     volumes:
-    - database:/var/lib/mysql
+      - database:/var/lib/mysql
     ports:
-    - 3306:3306
+      - 3306:3306
   adminer:
     restart: always
-    image: 'adminer:latest'
+    image: "adminer:latest"
     ports:
-    - 8080:8080
+      - 8080:8080
     depends_on:
-    - mysql
+      - mysql
   api:
     user: node
     restart: always
@@ -36,7 +36,7 @@ services:
       - .:/home/node/app
       - /home/node/app/node_modules/
     ports:
-      - 3000:3000
+      - 3020:3020
     env_file:
       - .env
     command: "node_modules/.bin/nodemon server.js"
