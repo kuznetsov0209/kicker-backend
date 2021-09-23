@@ -9,7 +9,13 @@ apiStatsRouter.get("/api/stats", async ctx => {
     weekDate: date,
     userId
   });
-  ctx.body = { usersStats };
+
+  ctx.body = {
+    usersStats: {
+      ...usersStats,
+      all: (usersStats.all || []).filter(item => item.games > 3)
+    }
+  };
 });
 
 apiStatsRouter.get("/leaderboard", async ctx => {
