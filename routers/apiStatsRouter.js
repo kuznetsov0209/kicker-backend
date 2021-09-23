@@ -24,7 +24,7 @@ apiStatsRouter.get("/leaderboard", async ctx => {
   });
   const standings = usersStats
     ? (usersStats.all || [])
-        .filter(item => item.games > 0)
+        .filter(item => item.games > 3)
         .map(item => {
           const initial = item.name
             .split(" ")
