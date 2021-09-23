@@ -170,7 +170,8 @@
         width: 40px;
         height: 40px;
         border-radius: 20px;
-        background: #235cff;
+        background-color: #235cff;
+        background-size: cover;
         color: #ffffff;
         display: -webkit-box;
         display: -ms-flexbox;
@@ -237,7 +238,11 @@
                   </div>
                 </div>
                 <div class="user__avatar">
+                  <% if (item.photoUrl) { %>
+                  <div class="avatar" style="background-image: url(<%= item.photoUrl; %>);"></div>
+                  <% } else { %>
                   <div class="avatar"><%= item.initial; %></div>
+                  <% } %>
                 </div>
               </div>
             </div>
