@@ -13,7 +13,7 @@ apiStatsRouter.get("/api/stats", async ctx => {
   ctx.body = {
     usersStats: {
       ...usersStats,
-      all: (usersStats.all || []).filter(item => item.games > 3)
+      all: (usersStats.all || []).filter(item => item.games > 0)
     }
   };
 });
@@ -24,7 +24,7 @@ apiStatsRouter.get("/leaderboard", async ctx => {
   });
   const standings = usersStats
     ? (usersStats.all || [])
-        .filter(item => item.games > 3)
+        .filter(item => item.games > 0)
         .map(item => {
           const initial = item.name
             .split(" ")
