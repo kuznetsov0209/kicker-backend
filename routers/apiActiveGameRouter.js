@@ -43,12 +43,12 @@ function handleSelectPlayer({ team, position, user }) {
   const gameSlot = gameSlots.find(
     gameSlot => gameSlot.position === position && gameSlot.team === team
   );
-  const prevGameSlot = gameSlots.find(
-    gameSlot => gameSlot.user && gameSlot.user.id === user.id
-  );
-  if (prevGameSlot) {
-    prevGameSlot.user = gameSlot.user;
-  }
+  // const prevGameSlot = gameSlots.find(
+  //   gameSlot => gameSlot.user && gameSlot.user.id === user.id
+  // );
+  // if (prevGameSlot) {
+  //   prevGameSlot.user = gameSlot.user;
+  // }
   gameSlot.user = user;
 }
 
