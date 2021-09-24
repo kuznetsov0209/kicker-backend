@@ -74,35 +74,37 @@ apiActiveGameRouter
     async ctx => {
       const dispatch = payload => ctx.sse.send(JSON.stringify(payload));
 
-      function handleEvent({ type, payload }) {
-        switch (type) {
-          case ACTION_SELECT_PLAYER:
-            handleSelectPlayer(payload);
-            dispatch({
-              type: ACTION_UPDATE_ALL_PLAYERS,
-              payload: { gameSlots }
-            });
-            break;
-          case ACTION_RESET_PLAYERS:
-            handleResetGame();
-            dispatch({
-              type: ACTION_UPDATE_ALL_PLAYERS,
-              payload: { gameSlots }
-            });
-            break;
-        }
-      }
+      dispatch({
+        type: ACTION_UPDATE_ALL_PLAYERS,
+        payload: { gameSlots }
+      });
 
-      dispatch({ type: ACTION_UPDATE_ALL_PLAYERS, payload: { gameSlots } });
-
-      gameEventEmitter.on("event", handleEvent);
+      gameEventEmitter.on("event", dispatch);
       ctx.sse.on("close", () => {
-        gameEventEmitter.removeListener("event", handleEvent);
+        gameEventEmitter.removeListener("event", dispatch);
       });
     }
   )
   .post("/api/active-game/events", async ctx => {
-    gameEventEmitter.emit("event", ctx.request.body);
+    const { type, payload } = ctx.request.body;
+
+    switch (type) {
+      case ACTION_SELECT_PLAYER:
+        handleSelectPlayer(payload);
+        gameEventEmitter.emit("event", {
+          type: ACTION_UPDATE_ALL_PLAYERS,
+          payload: { gameSlots }
+        });
+        break;
+      case ACTION_RESET_PLAYERS:
+        handleResetGame();
+        gameEventEmitter.emit("event", {
+          type: ACTION_UPDATE_ALL_PLAYERS,
+          payload: { gameSlots }
+        });
+        break;
+    }
+
     ctx.status = 204;
   });
 
