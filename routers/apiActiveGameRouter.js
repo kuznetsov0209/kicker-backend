@@ -47,9 +47,11 @@ function handleSelectPlayer({ team, position, user }) {
     gameSlot => gameSlot.user && gameSlot.user.id === user.id
   );
   if (prevGameSlot) {
-    prevGameSlot.user = gameSlot.user;
+    prevGameSlot.user = null;
   }
-  gameSlot.user = user;
+  if (gameSlot !== prevGameSlot) {
+    gameSlot.user = user;
+  }
 }
 
 function handleResetGame() {
