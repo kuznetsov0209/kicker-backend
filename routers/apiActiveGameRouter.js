@@ -52,7 +52,14 @@ function handleSelectPlayer({ team, position, user }) {
   gameSlot.user = user;
 }
 
+function handleResetGame() {
+  gameSlots.forEach(gameSlot => {
+    gameSlot.user = null;
+  });
+}
+
 const ACTION_SELECT_PLAYER = "select-player";
+const ACTION_RESET_PLAYERS = "reset-players";
 const ACTION_UPDATE_ALL_PLAYERS = "update-all-players";
 
 apiActiveGameRouter
@@ -69,6 +76,13 @@ apiActiveGameRouter
         switch (type) {
           case ACTION_SELECT_PLAYER:
             handleSelectPlayer(payload);
+            dispatch({
+              type: ACTION_UPDATE_ALL_PLAYERS,
+              payload: { gameSlots }
+            });
+            break;
+          case ACTION_RESET_PLAYERS:
+            handleResetGame();
             dispatch({
               type: ACTION_UPDATE_ALL_PLAYERS,
               payload: { gameSlots }
